@@ -24,7 +24,7 @@ typedef String TextBuilder(DateTime date, dynamic locale);
 typedef bool EnabledDayPredicate(DateTime day);
 
 /// Format to display the `TableCalendar` with.
-enum CalendarFormat { month, twoWeeks, week }
+enum CalendarFormat { month, twoWeeks, week, free }
 
 /// Available animations to update the `CalendarFormat` with.
 enum FormatAnimation { slide, scale }
@@ -185,6 +185,7 @@ class TableCalendar extends StatefulWidget {
       CalendarFormat.month: 'Month',
       CalendarFormat.twoWeeks: '2 weeks',
       CalendarFormat.week: 'Week',
+      CalendarFormat.free: 'Free'
     },
     this.headerVisible = true,
     this.enabledDayPredicate,
@@ -232,6 +233,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
       onVisibleDaysChanged: widget.onVisibleDaysChanged,
       onCalendarCreated: widget.onCalendarCreated,
       includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
+      startDay: widget.startDay,
+      endDay: widget.endDay,
     );
   }
 
