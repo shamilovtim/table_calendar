@@ -92,6 +92,8 @@ class CalendarController {
   bool _useNextCalendarFormat;
   bool _includeInvisibleDays;
   _SelectedDayCallback _selectedDayCallback;
+  DateTime _startDay;
+  DateTime _endDay;
 
   void _init({
     @required Map<DateTime, List> events,
@@ -105,6 +107,8 @@ class CalendarController {
     @required OnVisibleDaysChanged onVisibleDaysChanged,
     @required OnCalendarCreated onCalendarCreated,
     @required bool includeInvisibleDays,
+    @required DateTime startDay,
+    @required DateTime endDay,
   }) {
     _events = events;
     _holidays = holidays;
@@ -113,6 +117,8 @@ class CalendarController {
     _useNextCalendarFormat = useNextCalendarFormat;
     _selectedDayCallback = selectedDayCallback;
     _includeInvisibleDays = includeInvisibleDays;
+    _startDay = startDay;
+    _endDay = endDay;
 
     _pageId = 0;
     _dx = 0;
@@ -326,6 +332,8 @@ class CalendarController {
         ..addAll(_daysInWeek(
           _focusedDay.add(const Duration(days: 7)),
         ));
+    } else if (calendarFormat == CalendarFormat.free) {
+      return _daysInFree(_focusedDay);
     } else {
       return _daysInWeek(_focusedDay);
     }
@@ -349,6 +357,16 @@ class CalendarController {
     final last = _lastDayOfMonth(month);
     final daysAfter = _getDaysAfter(last);
 
+    final lastToDisplay = last.add(Duration(days: daysAfter));
+    return _daysInRange(firstToDisplay, lastToDisplay).toList();
+  }
+
+  List<DateTime> _daysInFree(DateTime month) {
+    final first = _startDay;
+    final daysBefore = _getDaysBefore(first);
+    final firstToDisplay = first.subtract(Duration(days: daysBefore));
+    final last = _endDay;
+    final daysAfter = _getDaysAfter(last);
     final lastToDisplay = last.add(Duration(days: daysAfter));
     return _daysInRange(firstToDisplay, lastToDisplay).toList();
   }
@@ -466,10 +484,24 @@ class CalendarController {
   }
 
   bool _isExtraDayBefore(DateTime day) {
+    if (calendarFormat == CalendarFormat.free) {
+      if (day.month < _focusedDay.month) {
+        return day.isAfter(_focusedDay);
+      } else {
+        return false;
+      }
+    }
     return day.month < _focusedDay.month;
   }
 
   bool _isExtraDayAfter(DateTime day) {
+    if (calendarFormat == CalendarFormat.free) {
+      if (day.month > _focusedDay.month) {
+        return day.isBefore(_focusedDay);
+      } else {
+        return false;
+      }
+    }
     return day.month > _focusedDay.month;
   }
 
