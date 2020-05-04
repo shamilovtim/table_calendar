@@ -120,6 +120,21 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
     );
   }
 
+  /// handles the text above the first day of a starting new month
+  Widget handleNewMonthText(DateTime startMonth, DateTime date) {
+    if (startMonth.month < date.month && date.day == 1) {
+      return Text(
+        DateFormat.MMMM().format(date),
+        style: TextStyle(
+          fontSize: 8.0,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else {
+      return Container(height: 10);
+    }
+  }
+
   Widget _buildTableCalendarWithBuilders(DateTime startMonth, DateTime endMonth) {
     print("$startMonth + $endMonth");
     return TableCalendar(
@@ -153,10 +168,13 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
             return FadeTransition(
               opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Container(
+                    child: handleNewMonthText(startMonth, date),
+                  ),
+                  Container(
                     width: double.infinity,
-                    margin: EdgeInsets.only(bottom: 5),
                     decoration: BoxDecoration(
                       color: Color(0xfff9cb86),
                       border: Border.all(width: 0, color: Color(0xfff9cb86)),
@@ -167,46 +185,50 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
                       textAlign: TextAlign.center,
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Icon(
-                        Icons.lightbulb_outline,
-                        size: 15.0,
-                        color: Colors.blue,
-                      ),
-                      Icon(
-                        Icons.drag_handle,
-                        size: 15.0,
-                        color: Colors.red,
-                      ),
-                    ],
+                  Container(
+                    margin: EdgeInsets.only(top: 2),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.lightbulb_outline,
+                          size: 15.0,
+                          color: Colors.blue,
+                        ),
+                        Icon(
+                          Icons.drag_handle,
+                          size: 15.0,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
                   )
                 ],
               ),
             );
           } else {
+            if (startMonth.month < date.month && date.day == 1) {}
             return FadeTransition(
               opacity: Tween(begin: 0.0, end: 1.0).animate(_animationController),
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxHeight: 11,
-                  minHeight: 11,
-                ),
-                child: Container(
-                  height: 11,
-                  width: 11,
-                  margin: const EdgeInsets.only(bottom: 5),
-                  decoration: BoxDecoration(
-                      // color: Color(0xfff9cb86),
-                      // border: Border.all(width: 0, color: Color(0xfff9cb86)),
-                      ),
-                  child: Text(
-                    '${date.day}',
-                    style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.center,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    // transform: Matrix4.translationValues(0.0, -5, 0.0),
+                    child: handleNewMonthText(startMonth, date),
                   ),
-                ),
+                  Container(
+                    margin: EdgeInsets.only(bottom: 5),
+                    child: Text(
+                      '${date.day}',
+                      style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  Container(
+                    height: 15,
+                  )
+                ],
               ),
             );
           }
