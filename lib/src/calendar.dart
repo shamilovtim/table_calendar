@@ -221,21 +221,6 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   void initState() {
     super.initState();
     calendarController = CalendarController();
-    calendarController._init(
-      events: widget.events,
-      holidays: widget.holidays,
-      initialDay: widget.initialSelectedDay,
-      initialFormat: widget.initialCalendarFormat,
-      availableCalendarFormats: widget.availableCalendarFormats,
-      useNextCalendarFormat: widget.headerStyle.formatButtonShowsNext,
-      startingDayOfWeek: widget.startingDayOfWeek,
-      selectedDayCallback: _selectedDayCallback,
-      onVisibleDaysChanged: widget.onVisibleDaysChanged,
-      onCalendarCreated: widget.onCalendarCreated,
-      includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
-      startDay: widget.startDay,
-      endDay: widget.endDay,
-    );
   }
 
   @override
@@ -255,6 +240,24 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     if (widget.onDaySelected != null) {
       widget.onDaySelected(day, calendarController.visibleEvents[_getEventKey(day)] ?? [], calendarController);
     }
+  }
+
+  void initController() {
+    calendarController._init(
+      events: widget.events,
+      holidays: widget.holidays,
+      initialDay: widget.initialSelectedDay,
+      initialFormat: widget.initialCalendarFormat,
+      availableCalendarFormats: widget.availableCalendarFormats,
+      useNextCalendarFormat: widget.headerStyle.formatButtonShowsNext,
+      startingDayOfWeek: widget.startingDayOfWeek,
+      selectedDayCallback: _selectedDayCallback,
+      onVisibleDaysChanged: widget.onVisibleDaysChanged,
+      onCalendarCreated: widget.onCalendarCreated,
+      includeInvisibleDays: widget.calendarStyle.outsideDaysVisible,
+      startDay: widget.startDay,
+      endDay: widget.endDay,
+    );
   }
 
   void _selectPrevious() {
@@ -342,6 +345,8 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
+    initController();
+
     return ClipRect(
       child: Column(
         mainAxisSize: MainAxisSize.min,
