@@ -145,7 +145,6 @@ class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
       initialSelectedDay: startMonth,
       initialCalendarFormat: CalendarFormat.free,
       startingDayOfWeek: StartingDayOfWeek.monday,
-      disableGestures: true,
       calendarStyle: CalendarStyle(
         contentPadding: EdgeInsets.all(0),
         outsideDaysVisible: false,

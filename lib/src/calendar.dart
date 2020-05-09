@@ -232,7 +232,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
     }
 
     if (oldWidget.availableCalendarFormats != widget.availableCalendarFormats) {
-      widget.calendarController._availableCalendarFormats = widget.availableCalendarFormats;
+      calendarController._availableCalendarFormats = widget.availableCalendarFormats;
     }
   }
 
@@ -363,13 +363,14 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
 
   Widget _buildHeader() {
     final children = [
-      widget.headerStyle.showLeftChevron ?
-        _CustomIconButton(
-          icon: widget.headerStyle.leftChevronIcon,
-          onTap: _selectNext,
-          margin: widget.headerStyle.leftChevronMargin,
-          padding: widget.headerStyle.leftChevronPadding,
-        ) : Container(),
+      widget.headerStyle.showLeftChevron
+          ? _CustomIconButton(
+              icon: widget.headerStyle.leftChevronIcon,
+              onTap: _selectNext,
+              margin: widget.headerStyle.leftChevronMargin,
+              padding: widget.headerStyle.leftChevronPadding,
+            )
+          : Container(),
       Expanded(
         child: GestureDetector(
           onTap: _onHeaderTapped,
@@ -383,13 +384,14 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           ),
         ),
       ),
-      widget.headerStyle.showRightChevron ?
-        _CustomIconButton(
-          icon: widget.headerStyle.rightChevronIcon,
-          onTap: _selectNext,
-          margin: widget.headerStyle.rightChevronMargin,
-          padding: widget.headerStyle.rightChevronPadding,
-        ) : Container()
+      widget.headerStyle.showRightChevron
+          ? _CustomIconButton(
+              icon: widget.headerStyle.rightChevronIcon,
+              onTap: _selectNext,
+              margin: widget.headerStyle.rightChevronMargin,
+              padding: widget.headerStyle.rightChevronPadding,
+            )
+          : Container()
     ];
 
     if (widget.headerStyle.formatButtonVisible && widget.availableCalendarFormats.length > 1) {
@@ -425,7 +427,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
   Widget _buildCalendarContent() {
     if (widget.formatAnimation == FormatAnimation.slide) {
       return AnimatedSize(
-        duration: Duration(milliseconds: widget.calendarController.calendarFormat == CalendarFormat.month ? 330 : 220),
+        duration: Duration(milliseconds: calendarController.calendarFormat == CalendarFormat.month ? 330 : 220),
         curve: Curves.fastOutSlowIn,
         alignment: Alignment(0, -1),
         vsync: this,
@@ -444,7 +446,7 @@ class _TableCalendarState extends State<TableCalendar> with SingleTickerProvider
           );
         },
         child: _buildWrapper(
-          key: ValueKey(widget.calendarController.calendarFormat),
+          key: ValueKey(calendarController.calendarFormat),
         ),
       );
     }
